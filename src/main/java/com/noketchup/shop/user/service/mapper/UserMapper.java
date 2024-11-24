@@ -37,6 +37,7 @@ public class UserMapper {
     user.setCreatedAt(userDomainModelObject.getCreatedAt());
     user.setLastUpdatedAt(userDomainModelObject.getLastUpdatedAt());
     user.setEmail(userDomainModelObject.getEmail());
+    user.setMobileNumber(userDomainModelObject.getMobileNumber());
     user.setStatus(userDomainModelObject.getStatus());
     user.setWallets(mapToWallets(userDomainModelObject.getWallets()));
     return user;

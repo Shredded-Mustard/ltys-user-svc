@@ -18,7 +18,7 @@ import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
-public class UserServiceImpl implements UserService{
+public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final UserMapper mapper;
@@ -26,23 +26,23 @@ public class UserServiceImpl implements UserService{
   @Override
   public void validateUser(UserRequest userRequest) {
     //make sure email address and username is unique
-    if(userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
+    if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
       throw new RuntimeException("Email already exists");
     }
 
-    if(userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
+    if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
       throw new RuntimeException("Username already exists");
     }
 
     //make sure date of birth is 18 years or older
-    if(userRequest.getDateOfBirth().isBefore(LocalDate.now().minusYears(18))) {
+    if (userRequest.getDateOfBirth().isAfter(LocalDate.now().minusYears(18))) {
       throw new RuntimeException("User must be 18 years or older");
     }
 
     //make sure mobile number is 10 digits
-    if(userRequest.getMobileNumber().length() != 10) {
-      throw new RuntimeException("Mobile number must be 10 digits");
-    }
+//    if(userRequest.getMobileNumber().length() != 10) {
+//      throw new RuntimeException("Mobile number must be 10 digits");
+//    }
   }
 
   @Override
@@ -53,9 +53,17 @@ public class UserServiceImpl implements UserService{
 
 
   @Override
-  public UserResponse getUser(UUID id) {
-    User user = userRepository.findById(id).orElseThrow(() -> new RuntimeException("User not found"));
+  public UserResponse getUser(String id) {
+    User user = userRepository.findById(UUID.fromString(id)).orElseThrow(() -> new RuntimeException("User not found"));
     return mapper.mapToUserResponse(user);
+  }
+
+  @Override
+  public UserResponse getUserByUniqueParam(String email, String phoneNumber, String username) {
+    User user = userRepository.findByEmailOrMobileNumberOrUsername(email, phoneNumber, username)
+            .orElseThrow(() -> new RuntimeException("User not found"));
+    return mapper.mapToUserResponse(user);
+
   }
 
 }

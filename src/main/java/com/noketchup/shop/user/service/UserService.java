@@ -9,5 +9,7 @@ import java.util.UUID;
 public interface UserService {
   void validateUser(UserRequest userRequest);
   void commitDomain(UserDomainModel userDomainModelObject);
-  UserResponse getUser(UUID id);
+  UserResponse getUser(String id);
+
+  UserResponse getUserByUniqueParam(String email, String phoneNumber, String username);
 }

@@ -12,22 +12,21 @@ import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor
-public class UserProducerImpl {
+public class UserProducerImpl implements UserProducer {
   @Value("${config.user.domain.topic}")
-  private final String userDomainTopic;
+  private String userDomainTopic;
 
 
-  private final KafkaTemplate<UUID, UserDomainModel> userDomainKafkaTemplate;
+  private final KafkaTemplate<String, UserDomainModel> userDomainKafkaTemplate;
 
   public void sendUserDomainEvent(UserDomainModel userDomainModelObject) {
-    ProducerRecord<UUID, UserDomainModel> record = new ProducerRecord<UUID, UserDomainModel>(
+    ProducerRecord<String, UserDomainModel> record = new ProducerRecord<String, UserDomainModel>(
             userDomainTopic,
-            userDomainModelObject.getId(),
+            userDomainModelObject.getId().toString(),
             userDomainModelObject
     );
 
     record.headers().add(new DomainEventHeader("NAME", "CREATE_NEW_USER"));
-
     userDomainKafkaTemplate.send(record);
   }
 
