@@ -1,7 +1,6 @@
 package com.noketchup.shop.user.config;
 
 import com.noketchup.shop.user.exception.ConsumeEventFailedException;
-import com.noketchup.shop.user.exception.NonRetryableException;
 import com.noketchup.shop.user.exception.RetryableException;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.context.annotation.Bean;
@@ -22,10 +21,16 @@ public class KafkaConfig {
   public DefaultErrorHandler errorHandler() {
     BackOff fixedBackOff = new FixedBackOff(interval, maxAttempts);
     DefaultErrorHandler errorHandler = new DefaultErrorHandler((consumerRecord, exception) -> {
+      //You can configure here what to do when an event fails like sending failure or a rollback event
       throw new ConsumeEventFailedException(consumerRecord, exception);
     }, fixedBackOff);
+
+    //Retryable exceptions will be retried by the number of *maxAttempts* every *interval*
+    //Retryable exceptions are Exceptions that may succeed when retrying due to a Mongo Socket exception
     errorHandler.addRetryableExceptions(RetryableException.class);
-    errorHandler.addNotRetryableExceptions(NonRetryableException.class);
+
+    //Non Retryable Exceptions are exceptions that may never succeed like exceptions due to validations
+    errorHandler.addNotRetryableExceptions(Exception.class);
     return errorHandler;
   }
 }

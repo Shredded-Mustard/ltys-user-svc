@@ -2,18 +2,14 @@ package com.noketchup.shop.user.service;
 
 import com.noketchup.shop.user.controller.dto.UserRequest;
 import com.noketchup.shop.user.controller.dto.UserResponse;
-import com.noketchup.shop.user.domain.model.UserDomainModel;
+import com.noketchup.shop.user.domain.UserDomainModel;
 import com.noketchup.shop.user.model.User;
 import com.noketchup.shop.user.repository.UserRepository;
 import com.noketchup.shop.user.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
-import org.springframework.stereotype.Component;
-import org.apache.commons.lang3.ObjectUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
-import java.util.Objects;
-import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -30,6 +26,7 @@ public class UserServiceImpl implements UserService {
       throw new RuntimeException("Email already exists");
     }
 
+    //make sure username does not already exist
     if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
       throw new RuntimeException("Username already exists");
     }
@@ -40,9 +37,9 @@ public class UserServiceImpl implements UserService {
     }
 
     //make sure mobile number is 10 digits
-//    if(userRequest.getMobileNumber().length() != 10) {
-//      throw new RuntimeException("Mobile number must be 10 digits");
-//    }
+    if(userRequest.getMobileNumber().length() != 10) {
+      throw new RuntimeException("Mobile number must be 10 digits");
+    }
   }
 
   @Override

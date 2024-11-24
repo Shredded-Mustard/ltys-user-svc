@@ -1,8 +1,9 @@
-package com.noketchup.shop.user.domain.model;
+package com.noketchup.shop.user.domain;
 
 import lombok.Data;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -13,8 +14,8 @@ public class UserDomainModel {
   private LocalDate dateOfBirth;
   private String mobileNumber;
   private String email;
-  private LocalDate createdAt;
-  private LocalDate lastUpdatedAt;
+  private LocalDateTime createdAt;
+  private LocalDateTime lastUpdatedAt;
   private String status;
   private List<WalletDomainModel> wallets;
 }

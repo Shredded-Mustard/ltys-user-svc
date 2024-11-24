@@ -1,14 +1,12 @@
 package com.noketchup.shop.user.producer;
 
-import com.noketchup.shop.user.domain.model.UserDomainModel;
+import com.noketchup.shop.user.domain.UserDomainModel;
 import lombok.RequiredArgsConstructor;
 import org.apache.kafka.clients.producer.ProducerRecord;
 import org.apache.kafka.common.header.Header;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.kafka.core.KafkaTemplate;
 import org.springframework.stereotype.Component;
-
-import java.util.UUID;
 
 @Component
 @RequiredArgsConstructor

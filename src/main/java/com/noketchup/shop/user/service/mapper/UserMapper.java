@@ -2,14 +2,14 @@ package com.noketchup.shop.user.service.mapper;
 
 import com.noketchup.shop.user.controller.dto.UserRequest;
 import com.noketchup.shop.user.controller.dto.UserResponse;
-import com.noketchup.shop.user.domain.model.UserDomainModel;
-import com.noketchup.shop.user.domain.model.WalletDomainModel;
+import com.noketchup.shop.user.domain.UserDomainModel;
+import com.noketchup.shop.user.domain.WalletDomainModel;
 import com.noketchup.shop.user.model.User;
 import com.noketchup.shop.user.model.Wallet;
-import org.springframework.stereotype.Component;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.UUID;
 
@@ -23,8 +23,8 @@ public class UserMapper {
     userDomainModel.setDateOfBirth(userRequest.getDateOfBirth());
     userDomainModel.setEmail(userRequest.getEmail());
     userDomainModel.setMobileNumber(userRequest.getMobileNumber());
-    userDomainModel.setCreatedAt(LocalDate.now());
-    userDomainModel.setLastUpdatedAt(LocalDate.now());
+    userDomainModel.setCreatedAt(LocalDateTime.now());
+    userDomainModel.setLastUpdatedAt(LocalDateTime.now());
     userDomainModel.setStatus("PENDING_ACTIVATION");
     return userDomainModel;
   }

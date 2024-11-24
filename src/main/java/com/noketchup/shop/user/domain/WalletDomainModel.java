@@ -1,4 +1,4 @@
-package com.noketchup.shop.user.domain.model;
+package com.noketchup.shop.user.domain;
 
 import lombok.Data;
 
