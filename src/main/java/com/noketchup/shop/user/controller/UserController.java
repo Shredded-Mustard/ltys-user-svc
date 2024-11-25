@@ -53,7 +53,7 @@ public class UserController {
   @PostMapping
   public ResponseEntity<String> createNewUser(@RequestBody @Valid UserRequest userRequest) {
     //Validate all fields before taking any action
-//    userService.validateUser(userRequest);
+    userService.validateUser(userRequest);
 
     //Map Request to the Domain Model
     UserDomainModel userDomainModelObject = mapper.mapToUserDomain(userRequest);
