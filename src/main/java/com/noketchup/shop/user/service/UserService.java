@@ -8,6 +8,5 @@ public interface UserService {
   void validateUser(UserRequest userRequest);
   void commitDomain(UserDomainModel userDomainModelObject);
   UserResponse getUser(String id);
-
   UserResponse getUserByUniqueParam(String email, String phoneNumber, String username);
 }
