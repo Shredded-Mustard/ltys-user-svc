@@ -45,6 +45,9 @@ public class UserServiceImpl implements UserService {
     }
 
     //make sure mobile number is 10 digits
+    if (userRepository.findByMobileNumber(userRequest.getMobileNumber()).isPresent())
+      throw new RuntimeException("Mobile Number Exist");
+
     if (!phoneNumberPattern.matcher(userRequest.getMobileNumber()).matches() || userRequest.getMobileNumber().length() != 10) {
       throw new RuntimeException("Mobile number must be 10 digits");
     }

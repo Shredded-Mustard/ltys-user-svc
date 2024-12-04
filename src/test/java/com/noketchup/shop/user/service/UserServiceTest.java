@@ -13,6 +13,8 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.CsvFileSource;
+import org.junit.jupiter.params.provider.CsvSource;
+import org.mockito.BDDMockito;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
@@ -75,10 +77,36 @@ class UserServiceTest {
 
   @Test
   @DisplayName("Commit Domain")
-  void testCommitDomain(){
+  void testCommitDomain() {
     when(userRepository.save(any())).thenReturn(new User());
     userService.commitDomain(new UserDomainModel());
     verify(userRepository, times(1)).save(any());
+  }
+
+  @DisplayName("Validate User Given Unique values exist")
+  @ParameterizedTest(name = "{displayName} - [{index}] {arguments}")
+  @CsvSource(value = {
+          "existingusername,email@email.com,0123456789,15/01/1998",
+          "username,existingemail@email.com,0123456789,15/01/1998",
+          "username,email@email.com,0123456781,15/01/1998",
+  })
+  void testWillBlockIfUniqueValuesExistInDb(String username, String email, String phoneNumber, String dateOfBirth) {
+    UserRequest userRequest = buildUserRequestFromArgs(username, email, phoneNumber, dateOfBirth);
+    BDDMockito
+            .given(userRepository.findByEmail("existingemail@email.com"))
+            .willReturn(Optional.of(new User()))
+            .willReturn(Optional.empty());
+
+    BDDMockito
+            .given(userRepository.findByUsername("existingusername"))
+            .willReturn(Optional.of(new User()))
+            .willReturn(Optional.empty());
+    BDDMockito
+            .given(userRepository.findByMobileNumber("0123456781"))
+            .willReturn(Optional.of(new User()))
+            .willReturn(Optional.empty());
+
+    assertThrows(RuntimeException.class, () -> userService.validateUser(userRequest));
   }
 
   @DisplayName("Validate User Request")
