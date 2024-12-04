@@ -1,0 +1,10 @@
+username,email,mobileNumber,dateOfBirth,isValid,reason
+validUserName,valid@email.com,text:0123456789,15/01/2006,TRUE,
+empty,valid@email.com,text:0123456789,15/01/1998,FALSE,Username Cannot be an Empty
+validUserName,invalidemail,text:0123456789,15/01/1998,FALSE,Invalid Email Address Provided
+validUserName,invalidemail.com,text:0123456789,15/01/1998,FALSE,Invalid Email Address Provided
+validUserName,empty,text:0123456789,15/01/1998,FALSE,Invalid Email Address Provided
+validUserName,valid@email.com,text:01234567891,15/01/1998,FALSE,Mobile number must be 10 digits
+validUserName,valid@email.com,text:invalidphn,15/01/1998,FALSE,Mobile number must be 10 digits
+validUserName,valid@email.com,text:,15/01/1998,FALSE,Mobile number must be 10 digits
+validUserName,valid@email.com,text:0123456789,15/01/2007,FALSE,User must be 18 years or older

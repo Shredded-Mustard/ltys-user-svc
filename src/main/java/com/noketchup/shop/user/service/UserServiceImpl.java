@@ -7,10 +7,12 @@ import com.noketchup.shop.user.model.User;
 import com.noketchup.shop.user.repository.UserRepository;
 import com.noketchup.shop.user.service.mapper.UserMapper;
 import lombok.RequiredArgsConstructor;
+import org.apache.commons.lang3.StringUtils;
 import org.springframework.stereotype.Service;
 
 import java.time.LocalDate;
 import java.util.UUID;
+import java.util.regex.Pattern;
 
 @Service
 @RequiredArgsConstructor
@@ -18,15 +20,21 @@ public class UserServiceImpl implements UserService {
 
   private final UserRepository userRepository;
   private final UserMapper mapper;
+  private static final Pattern emailPattern = Pattern.compile("^[A-Z0-9._%+-]+@[A-Z0-9.-]+\\.[A-Z]{2,6}$", Pattern.CASE_INSENSITIVE);
+  private static final Pattern phoneNumberPattern = Pattern.compile("^[0-9]+");
 
   @Override
   public void validateUser(UserRequest userRequest) {
-    //make sure email address and username is unique
+    //make sure email address is Valid
+    if (!emailPattern.matcher(userRequest.getEmail()).matches())
+      throw new RuntimeException("Invalid Email Address Provided");
     if (userRepository.findByEmail(userRequest.getEmail()).isPresent()) {
       throw new RuntimeException("Email already exists");
     }
 
-    //make sure username does not already exist
+    //make sure username is Valid
+    if (StringUtils.isBlank(userRequest.getUsername()))
+      throw new RuntimeException("Username Cannot be an Empty");
     if (userRepository.findByUsername(userRequest.getUsername()).isPresent()) {
       throw new RuntimeException("Username already exists");
     }
@@ -37,7 +45,7 @@ public class UserServiceImpl implements UserService {
     }
 
     //make sure mobile number is 10 digits
-    if(userRequest.getMobileNumber().length() != 10) {
+    if (!phoneNumberPattern.matcher(userRequest.getMobileNumber()).matches() || userRequest.getMobileNumber().length() != 10) {
       throw new RuntimeException("Mobile number must be 10 digits");
     }
   }
